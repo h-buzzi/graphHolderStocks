@@ -88,7 +88,7 @@ def create_Graph(mode, dataFrame, color_company, color_holder, metric_size, metr
         return
         
     def draw_Graph(G, nd_size, edge_value, colors, fgS):
-        plt.figure(figsize=fgS)
+        fig = plt.figure(figsize=fgS)
         if mode == 'stocks':
             layout = nx.spring_layout(G)
         elif mode == 'link':
@@ -96,6 +96,7 @@ def create_Graph(mode, dataFrame, color_company, color_holder, metric_size, metr
         nx.draw(G, with_labels = True, node_color=colors, node_size = nd_size, width = edge_value, pos = layout)
         nx.draw_networkx_edge_labels(G, layout, edge_labels = nx.get_edge_attributes(G,'% Out'))
         node_margins()
+        fig.text(0,0,'Porcentagem total segurada: ' + str(sum(dataFrame['% Out'])) + '%', fontsize = 15)
         return
         
     G = nx.from_pandas_edgelist(dataFrame, 'Holder', 'Comp', edge_attr=True)
@@ -114,3 +115,4 @@ all_holders = get_holders_stock_DataFrame(mode = modo, name = stock)
 
 ## Montagem e visualização Grafo
 Graph = create_Graph(modo,all_holders,'red','yellow',500,3, (12,12)) #Retorna o Grafo
+print(sum(all_holders['% Out']))
